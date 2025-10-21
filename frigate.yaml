@@ -1,0 +1,107 @@
+mqtt:
+  host: 192.168.0.0:50
+  port: 1883
+  topic_prefix: frigate
+  client_id: frigate
+  # Optional: user
+  user: your MQTT username
+  password: your mqtt password
+  stats_interval: 25
+
+detectors:
+  coral:
+    type: edgetpu
+    device: usb
+
+objects:
+  filters:
+    person:
+      min_score: 0.70
+      # Optional: minimum decimal percentage for tracked object's computed score to be considered a true positive (default: shown below)
+      threshold: 0.7
+      min_area: 6000
+  track:
+    - person
+    - dog
+    - cat
+    - bird
+    - ups
+    - amazon
+    - fedex
+    - package
+    - waste_bin
+face_recognition:
+  enabled: true
+  detection_threshold: 0.7
+
+
+  model_size: small
+ffmpeg:
+  hwaccel_args: preset-rpi-64-h264
+
+snapshots:
+  enabled: true
+  timestamp: true
+  bounding_box: true
+  crop: true
+  retain:
+    default: 3
+birdseye:
+  enabled: false
+
+
+record:
+  enabled: true
+  expire_interval: 60
+  sync_recordings: false
+  retain:
+    days: 0
+    mode: all
+  alerts:
+    retain:
+      days: 5
+    pre_capture: 5
+    post_capture: 5
+  detections:
+    retain:
+      days: 5
+    pre_capture: 5
+    post_capture: 5
+
+# LPR global configuration
+lpr:
+  enabled: true
+  device: CPU # can also be GPU if available and correct Docker image is used
+  detection_threshold: 0.7 # change if necessary
+
+cameras:
+
+  FrontyardFrigate:
+    enabled: true
+    detect:
+      width: 640
+      height: 480
+      fps: 5
+    lpr:
+      enabled: false
+    ffmpeg:
+      inputs:
+        - path: 
+            rtsp://add yours here
+
+          roles:
+            - detect
+            - record
+
+
+
+detect:
+  enabled: true
+version: 0.16-0
+semantic_search:
+  enabled: false
+  model_size: small
+
+classification:
+  bird:
+    enabled: false
